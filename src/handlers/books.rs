@@ -3,7 +3,7 @@ use axum::extract::Path;
 use tracing::instrument;
 use crate::state::AppState;
 use crate::service::book_service;
-use crate::domain::books::request_book::BookDto;
+use crate::domain::books::book_dto::BookDto;
 use crate::domain::error_handling::books_error::BooksError;
 
 #[axum::debug_handler]

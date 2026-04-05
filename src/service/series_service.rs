@@ -5,7 +5,7 @@ use crate::domain::error_handling::books_error::BooksError;
 use crate::state::AppState;
 use crate::repo::book_repo;
 
-pub async fn get_book(state: &AppState, id: i64) -> Result<BookDto, BooksError> {
+pub async fn get_series_by_id(state: &AppState, id: i64) -> Result<BookDto, BooksError> {
     let book  = book_repo::fetch_book(&state.db_pool, id)
         .await
         .map(BookDto::from)
@@ -14,7 +14,7 @@ pub async fn get_book(state: &AppState, id: i64) -> Result<BookDto, BooksError> 
     book
 }
 
-pub async fn get_books(state: &AppState) -> Vec<BookDto> {
+pub async fn get_series(state: &AppState) -> Vec<BookDto> {
     let books: Result<Vec<BookEntity>, SqlxError> = book_repo::fetch_books(&state.db_pool).await;
 
     match books {

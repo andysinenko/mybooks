@@ -1,6 +1,6 @@
 use chrono::NaiveDate;
 use serde::{Deserialize, Serialize};
-use crate::domain::books::book::BookEntity;
+use crate::domain::books::book_entity::BookEntity;
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct BookDto {

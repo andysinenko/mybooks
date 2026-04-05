@@ -1,5 +1,6 @@
-pub mod genre;
-pub mod series;
-pub mod book;
-pub mod request_book;
-pub mod request_series;
+pub mod genre_enum;
+pub mod series_entity;
+pub mod author_entity;
+pub mod book_entity;
+pub mod book_dto;
+pub mod series_dto;

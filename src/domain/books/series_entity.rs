@@ -1,3 +1,4 @@
+use chrono::Utc;
 use serde::Serialize;
 use sqlx::FromRow;
 
@@ -5,4 +6,6 @@ use sqlx::FromRow;
 pub struct SeriesEntity {
     pub id: i64,
     pub name: String,
+    pub created_at: chrono::DateTime<Utc>,
+    pub updated_at: chrono::DateTime<Utc>
 }

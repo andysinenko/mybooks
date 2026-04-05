@@ -1,6 +1,6 @@
 use sqlx::{PgPool, query_as, query, Error};
 use tracing::{error, info, warn};
-use crate::domain::books::book::BookEntity;
+use crate::domain::books::book_entity::BookEntity;
 
 pub async fn fetch_books(pool: &PgPool) -> Result<Vec<BookEntity>, Error> {
     let start = std::time::Instant::now();
