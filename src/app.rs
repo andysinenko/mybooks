@@ -5,7 +5,7 @@ use crate::state::AppState;
 pub fn books_routes() -> Router<AppState> {
     Router::new()
         .route("/books", get(get_books).post(create_book))
-        .route("/book/{id}", get(get_book).put(update_book).delete(delete_book))
+        .route("/books/{id}", get(get_book).put(update_book).delete(delete_book))
 }
 
 pub fn create_app(state: AppState) -> Router {

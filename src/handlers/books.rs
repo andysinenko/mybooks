@@ -8,18 +8,18 @@ use crate::domain::error_handling::books_error::BooksError;
 
 #[axum::debug_handler]
 #[instrument(skip(state), fields(book_id = %id))]
-pub async fn get_book(State(state): State<AppState>, Path(id): Path<i64>) -> Json<Result<BookDto, BooksError>> {
+pub async fn get_book(State(state): State<AppState>, Path(id): Path<i64>) -> Result<Json<BookDto>, BooksError> {
     let book = book_service::get_book(&state, id).await;
     match book {
-        Ok(book) => Json(Ok(book)),
-        Err(error) => Json(Err(error)),
+        Ok(book) => Ok(Json(book)),           // 200 + JSON книги
+        Err(error) => Err(error),             // AppError преобразуется в нужный статус + JSON ошибки
     }
 }
 
 #[axum::debug_handler]
-pub async fn get_books(State(state): State<AppState>,) -> Json<Vec<BookDto>> {
+pub async fn get_books(State(state): State<AppState>,) -> Result<Json<Vec<BookDto>>, BooksError> {
     let books = book_service::get_books(&state).await;
-    Json(books)
+    Ok(Json(books))
 }
 
 pub async fn create_book() {
