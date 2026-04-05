@@ -6,6 +6,6 @@ use sqlx::FromRow;
 pub struct AuthorEntity {
     pub id: i64,
     pub name: String,
-    pub created_at: chrono::DateTime<Utc>,
-    pub updated_at: chrono::DateTime<Utc>
+    pub created_at: Option<chrono::DateTime<Utc>>,
+    pub updated_at: Option<chrono::DateTime<Utc>>
 }

@@ -1,8 +1,18 @@
 use serde::Deserialize;
 use sqlx::FromRow;
+use crate::domain::books::author_entity::AuthorEntity;
 
 #[derive(Debug, Deserialize, FromRow)]
 pub struct AuthorDto {
     pub id: i64,
     pub name: String,
+}
+
+impl From<AuthorEntity> for AuthorDto {
+    fn from(entity: AuthorEntity) -> Self {
+        AuthorDto {
+            id: entity.id,
+            name: entity.name
+        }
+    }
 }

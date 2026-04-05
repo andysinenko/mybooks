@@ -5,7 +5,7 @@ use crate::domain::books::book_entity::BookEntity;
 #[derive(Debug, Deserialize, Serialize)]
 pub struct BookDto {
     pub publication_year: Option<NaiveDate>,
-    pub title: Option<String>,
+    pub title: String,
     pub publisher: Option<String>,
     pub volume_number: Option<String>,
     pub genre_id: Option<i64>,
@@ -23,8 +23,8 @@ impl From<BookEntity> for BookDto {
             volume_number: entity.volume_number,
             genre_id: entity.genre_id,
             series_id: entity.series_id,
-            description: entity.description,
             place_id: entity.place_id,
+            description: entity.description,
         }
     }
 }

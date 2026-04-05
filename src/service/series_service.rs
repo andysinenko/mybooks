@@ -1,24 +1,23 @@
-use sqlx::Error as SqlxError;
-use crate::domain::books::book_entity::BookEntity;
-use crate::domain::books::book_dto::BookDto;
+use crate::domain::books::series_dto::SeriesDto;
 use crate::domain::error_handling::books_error::BooksError;
 use crate::state::AppState;
-use crate::repo::book_repo;
+use crate::repo::{series_repo};
+use crate::repo::series_repo::{fetch_series};
 
-pub async fn get_series_by_id(state: &AppState, id: i64) -> Result<BookDto, BooksError> {
-    let book  = book_repo::fetch_book(&state.db_pool, id)
+pub async fn get_series_by_id(state: &AppState, id: i64) -> Result<SeriesDto, BooksError> {
+    let series= series_repo::fetch_series_by_id(&state.db_pool, id)
         .await
-        .map(BookDto::from)
-        .ok_or_else(|| BooksError::NotFound(format!("Книга с id {id} не найдена")));
+        .map(SeriesDto::from)
+        .ok_or_else(|| BooksError::NotFound(format!("Серия с id {id} не найдена")));
 
-    book
+    series
 }
 
-pub async fn get_series(state: &AppState) -> Vec<BookDto> {
-    let books: Result<Vec<BookEntity>, SqlxError> = book_repo::fetch_books(&state.db_pool).await;
-
-    match books {
-        Ok(books) => {books.into_iter().map(BookDto::from).collect()},
-        Err(error) => {vec![]}
-    }
+pub async fn get_series(state: &AppState) -> Result<Vec<SeriesDto>, BooksError> {
+    let series:Result<Vec< crate::domain::books::series_dto::SeriesDto >, crate::domain::error_handling::books_error::BooksError > = fetch_series(&state.db_pool)
+            .await
+            .map(|series| {
+                series.into_iter().map(SeriesDto::from).collect()
+            });
+    series
 }

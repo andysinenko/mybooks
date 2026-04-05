@@ -16,8 +16,10 @@ pub async fn fetch_books(pool: &PgPool) -> Result<Vec<BookEntity>, Error> {
             volume_number,
             genre_id,
             series_id,
+            place_id,
             description,
-            place_id
+            created_at,
+            updated_at
         FROM books
         "#
     )
