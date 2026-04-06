@@ -6,7 +6,7 @@ use serde::Serialize;
 #[derive(Debug, Serialize)]
 pub enum BooksError {
     NotFound(String),
-    Database(String),
+    DatabaseError(String),
     Internal(String),
 }
 
@@ -20,7 +20,7 @@ impl IntoResponse for BooksError {
         let (status, message) = match self { 
             BooksError::NotFound(msg) => (StatusCode::NOT_FOUND, msg),
             BooksError::Internal(msg) => (StatusCode::INTERNAL_SERVER_ERROR, msg),
-            BooksError::Database(msg) => (StatusCode::INTERNAL_SERVER_ERROR, msg),
+            BooksError::DatabaseError(msg) => (StatusCode::INTERNAL_SERVER_ERROR, msg),
         };
 
         let body = Json(ErrorResponse { error: message });

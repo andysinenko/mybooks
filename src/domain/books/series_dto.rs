@@ -1,6 +1,6 @@
+use crate::domain::books::series_entity::SeriesEntity;
 use serde::{Deserialize, Serialize};
 use sqlx::FromRow;
-use crate::domain::books::series_entity::SeriesEntity;
 
 #[derive(Debug, Deserialize, FromRow, Serialize)]
 pub struct SeriesDto {

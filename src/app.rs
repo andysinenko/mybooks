@@ -1,9 +1,9 @@
-use axum::{Router, routing::get};
-use crate::handlers::books::{get_books, get_book, create_book, update_book, delete_book};
+use crate::handlers::author::{get_author_by_id, get_authors};
+use crate::handlers::books::{create_book, delete_book, get_book, get_books, update_book};
 use crate::handlers::genre::{create_genre, get_genre_by_id, get_genres};
-use crate::handlers::author::{create_author, get_author_by_id, get_authors};
-use crate::handlers::series::{get_series, get_series_by_id, create_series};
+use crate::handlers::series::{create_series, get_series, get_series_by_id};
 use crate::state::AppState;
+use axum::{routing::get, Router};
 
 pub fn books_routes() -> Router<AppState> {
     Router::new()

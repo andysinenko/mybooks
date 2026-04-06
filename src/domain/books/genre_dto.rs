@@ -1,6 +1,6 @@
+use crate::domain::books::genre_entity::GenreEntity;
 use serde::{Deserialize, Serialize};
 use sqlx::FromRow;
-use crate::domain::books::genre_entity::GenreEntity;
 
 #[derive(Debug, Deserialize, FromRow, Serialize)]
 pub struct GenreDto {
