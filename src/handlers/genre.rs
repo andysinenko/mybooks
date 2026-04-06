@@ -8,7 +8,7 @@ use crate::domain::error_handling::books_error::BooksError;
 use crate::service::genre_service;
 
 #[axum::debug_handler]
-#[instrument(skip(state), fields(series_id = %id))]
+#[instrument(skip(state), fields(genre_id = %id))]
 pub async fn get_genre_by_id(State(state): State<AppState>, Path(id): Path<i64>) -> Result<Json<GenreDto>, BooksError> {
     let genre = genre_service::get_genre_by_id(&state, id).await;
     match genre {
@@ -29,8 +29,3 @@ pub async fn get_genres(State(state): State<AppState>,) -> Result<Json<Vec<Genre
 pub async fn create_genre() {
 
 }
-
-
-
-
-

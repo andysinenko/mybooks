@@ -1,8 +1,8 @@
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use sqlx::FromRow;
 use crate::domain::books::author_entity::AuthorEntity;
 
-#[derive(Debug, Deserialize, FromRow)]
+#[derive(Debug, Deserialize, FromRow, Serialize)]
 pub struct AuthorDto {
     pub id: i64,
     pub name: String,

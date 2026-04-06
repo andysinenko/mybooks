@@ -14,7 +14,7 @@ pub async fn get_genre_by_id(state: &AppState, id: i64) -> Result<GenreDto, Book
 }
 
 pub async fn get_genres(state: &AppState) -> Result<Vec<GenreDto>, BooksError> {
-    let genres:Result<Vec< GenreDto >, crate::domain::error_handling::books_error::BooksError > = fetch_genres(&state.db_pool)
+    let genres:Result<Vec<GenreDto>, BooksError> = fetch_genres(&state.db_pool)
             .await
             .map(|genres| {
                 genres.into_iter().map(GenreDto::from).collect()

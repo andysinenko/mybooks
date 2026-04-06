@@ -21,6 +21,7 @@ pub async fn fetch_series_by_id(pool: &PgPool, id: i64) -> Option<SeriesEntity> 
 }
 
 pub async fn fetch_series(pool: &PgPool) -> Result<Vec<SeriesEntity>, BooksError> {
+  info!("Выполняем запрос серий");
     let start = std::time::Instant::now();
 
     let series = query_as!(
@@ -48,6 +49,3 @@ pub async fn fetch_series(pool: &PgPool) -> Result<Vec<SeriesEntity>, BooksError
         }
     }
 }
-
-
-

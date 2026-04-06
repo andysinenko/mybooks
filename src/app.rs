@@ -1,6 +1,7 @@
 use axum::{Router, routing::get};
 use crate::handlers::books::{get_books, get_book, create_book, update_book, delete_book};
 use crate::handlers::genre::{create_genre, get_genre_by_id, get_genres};
+use crate::handlers::author::{create_author, get_author_by_id, get_authors};
 use crate::handlers::series::{get_series, get_series_by_id, create_series};
 use crate::state::AppState;
 
@@ -22,10 +23,17 @@ pub fn genre_routes() -> Router<AppState> {
         .route("/genres/{id}", get(get_genre_by_id))
 }
 
+pub fn author_routes() -> Router<AppState> {
+    Router::new()
+        .route("/authors", get(get_authors).post(create_genre))
+        .route("/authors/{id}", get(get_author_by_id))
+}
+
 pub fn create_app(state: AppState) -> Router {
     Router::new()
         .nest("/api", books_routes())
         .nest("/api", series_routes())
         .nest("/api", genre_routes())
+        .nest("/api", author_routes())
         .with_state(state)
 }

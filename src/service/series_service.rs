@@ -14,7 +14,7 @@ pub async fn get_series_by_id(state: &AppState, id: i64) -> Result<SeriesDto, Bo
 }
 
 pub async fn get_series(state: &AppState) -> Result<Vec<SeriesDto>, BooksError> {
-    let series:Result<Vec< crate::domain::books::series_dto::SeriesDto >, crate::domain::error_handling::books_error::BooksError > = fetch_series(&state.db_pool)
+    let series:Result<Vec<SeriesDto >, BooksError > = fetch_series(&state.db_pool)
             .await
             .map(|series| {
                 series.into_iter().map(SeriesDto::from).collect()
