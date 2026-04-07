@@ -26,6 +26,6 @@ pub async fn get_authors(State(state): State<AppState>,) -> Result<Json<Vec<Auth
     }
 }
 
-pub async fn create_author() {
-
+pub async fn create_author(author: AuthorDto) {
+  
 }

@@ -1,4 +1,4 @@
-use crate::domain::books::author_entity::AuthorEntity;
+use crate::domain::books::{author_entity::AuthorEntity, create_author_dto::CreateAuthorDto};
 use crate::domain::error_handling::books_error::BooksError;
 use sqlx::{query, query_as, Error, PgPool};
 use tracing::{error, info, warn};
@@ -25,3 +25,7 @@ pub async fn fetch_authors(pool: &PgPool) -> Result<Vec<AuthorEntity>, sqlx::Err
     info!(rows = authors.len(), elapsed_ms = elapsed.as_millis(), "Успешно получены авторы");
     Ok(authors)
 }
+
+//pub async fn insert_author(author: CreateAuthorDto) -> Result<AuthorEntity, sqlx::Error> {
+
+//}

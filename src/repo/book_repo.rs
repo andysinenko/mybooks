@@ -9,18 +9,30 @@ pub async fn fetch_books(pool: &PgPool) -> Result<Vec<BookEntity>, Error> {
         BookEntity,
         r#"
         SELECT
-            id,
-            publication_year,
-            title,
-            publisher,
-            volume_number,
-            genre_id,
-            series_id,
-            place_id,
-            description,
-            created_at,
-            updated_at
-        FROM books
+            b.id,
+            b.publication_year,
+            b.title,
+            b.publisher,
+            b.volume_number,
+
+            g.id as genre_id,
+            g.name as genre_name,
+            g.note as genre_note,
+
+            a.id as author_id,
+            a.name as author_name,
+
+            s.id as series_id,
+            s.name as series_name,
+
+            b.place_id,
+            b.description,
+            b.created_at,
+            b.updated_at
+        FROM books b
+        INNER JOIN series s ON b.series_id = s.id
+        INNER JOIN authors a ON b.author_id = a.id
+        INNER JOIN genre g ON b.genre_id = g.id
         "#
     )
     .fetch_all(pool)
@@ -34,7 +46,32 @@ pub async fn fetch_books(pool: &PgPool) -> Result<Vec<BookEntity>, Error> {
 pub async fn fetch_book(pool: &PgPool, id: i64) -> Result<Option<BookEntity>, sqlx::Error> {
     info!("Выполняем запрос книги id={}", id);
 
-    let book = query_as!(BookEntity, "SELECT * FROM books WHERE id = $1", id)
+    let book = query_as!(BookEntity, "SELECT
+            b.id,
+            b.publication_year,
+            b.title,
+            b.publisher,
+            b.volume_number,
+
+            g.id as genre_id,
+            g.name as genre_name,
+            g.note as genre_note,
+
+            a.id as author_id,
+            a.name as author_name,
+
+            s.id as series_id,
+            s.name as series_name,
+
+            b.place_id,
+            b.description,
+            b.created_at,
+            b.updated_at
+        FROM books b
+        INNER JOIN series s ON b.series_id = s.id
+        INNER JOIN authors a ON b.author_id = a.id
+        INNER JOIN genre g ON b.genre_id = g.id
+        WHERE b.id = $1", id)
         .fetch_optional(pool)
         .await?;
 

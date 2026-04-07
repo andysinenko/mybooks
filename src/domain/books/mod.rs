@@ -6,3 +6,4 @@ pub mod author_entity;
 pub mod author_dto;
 pub mod book_entity;
 pub mod book_dto;
+pub mod create_author_dto;
