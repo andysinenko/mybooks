@@ -1,7 +1,6 @@
 use chrono::{NaiveDate, Utc};
 use serde::Serialize;
 use sqlx::FromRow;
-use crate::domain::books::series_entity::SeriesEntity;
 
 #[derive(Debug, Serialize, FromRow)]
 pub struct BookEntity {
