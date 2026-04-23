@@ -1,10 +1,12 @@
 use axum::{extract::State, Json};
 use axum::extract::Path;
+use sqlx::PgPool;
 use tracing::instrument;
 use crate::state::AppState;
 use crate::service::{book_service};
-use crate::domain::books::book_dto::BookDto;
+use crate::domain::books::book_dto::{BookDto, CreateBookDto};
 use crate::domain::error_handling::books_error::BooksError;
+use crate::service::book_service::create_book;
 
 #[axum::debug_handler]
 #[instrument(skip(state), fields(book_id = %id))]
@@ -25,8 +27,15 @@ pub async fn get_books(State(state): State<AppState>,) -> Result<Json<Vec<BookDt
     }
 }
 
-pub async fn create_book() {
-
+pub async fn create_book_handler(
+    State(state): State<AppState>,
+    Json(dto): Json<CreateBookDto>,
+) -> Result<Json<BookDto>, BooksError> {
+    let books = create_book(&state, dto).await;
+    match books {
+        Ok(books) => Ok(Json(books)),
+        Err(error) => Err(error),
+    }
 }
 
 pub async fn update_book() {

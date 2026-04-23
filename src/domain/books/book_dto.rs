@@ -44,3 +44,16 @@ impl From<BookEntity> for BookDto {
     }
 }
 
+#[derive(Debug, Deserialize)]
+pub struct CreateBookDto {
+    pub title: String,
+    pub publication_year: Option<NaiveDate>,
+    pub publisher: Option<String>,
+    pub volume_number: Option<String>,
+    pub author_id: i64,
+    pub genre_id: i64,
+    pub series_id: i64,
+    pub place_id: Option<i64>,
+    pub description: Option<String>,
+}
+

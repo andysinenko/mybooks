@@ -1,7 +1,9 @@
+use axum::http::StatusCode;
+use axum::Json;
 use sqlx::Error as SqlxError;
 use crate::domain::books::author_dto::AuthorDto;
 use crate::domain::books::book_entity::BookEntity;
-use crate::domain::books::book_dto::BookDto;
+use crate::domain::books::book_dto::{BookDto, CreateBookDto};
 use crate::domain::error_handling::books_error::BooksError;
 use crate::repo::author_repo::fetch_authors;
 use crate::state::AppState;
@@ -27,4 +29,11 @@ pub async fn get_books(state: &AppState) -> Result<Vec<BookDto>, BooksError> {
             books.into_iter().map(BookDto::from).collect()
         });
     books
+}
+
+pub async fn create_book(state: &AppState, dto: CreateBookDto) -> Result<BookDto, BooksError> {
+    book_repo::create_book(&state.db_pool, dto)
+        .await
+        .map_err(|e| BooksError::DatabaseError(e.to_string()))
+        .map(BookDto::from)
 }
