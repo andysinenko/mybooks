@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyBooks API</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Syne:wght@400;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0d0f12;
+            --surface: #13161b;
+            --border: #1e2530;
+            --green: #4ade80;
+            --green-dim: #22543d;
+            --blue: #60a5fa;
+            --orange: #fb923c;
+            --muted: #4b5563;
+            --text: #e2e8f0;
+            --text-dim: #94a3b8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'JetBrains Mono', monospace;
+            min-height: 100vh;
+            padding: 48px 24px;
+        }
+
+        /* scanline effect */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(0,0,0,0.03) 2px,
+                    rgba(0,0,0,0.03) 4px
+            );
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        .container {
+            max-width: 860px;
+            margin: 0 auto;
+        }
+
+        header {
+            margin-bottom: 56px;
+            animation: fadeDown 0.6s ease both;
+        }
+
+        .logo {
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            font-size: 2.4rem;
+            color: var(--green);
+            letter-spacing: -1px;
+            line-height: 1;
+        }
+
+        .logo span { color: var(--text-dim); font-weight: 400; }
+
+        .tagline {
+            margin-top: 8px;
+            color: var(--text-dim);
+            font-size: 0.75rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+
+        .base-url {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 20px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            color: var(--blue);
+        }
+
+        .base-url::before {
+            content: 'BASE';
+            font-size: 0.6rem;
+            letter-spacing: 0.1em;
+            color: var(--muted);
+            background: var(--border);
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+
+        .endpoint {
+            margin-bottom: 28px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+            animation: fadeUp 0.5s ease both;
+        }
+
+        .endpoint:nth-child(1) { animation-delay: 0.1s; }
+        .endpoint:nth-child(2) { animation-delay: 0.2s; }
+        .endpoint:nth-child(3) { animation-delay: 0.3s; }
+
+        .endpoint-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 20px;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .method {
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            padding: 4px 10px;
+            border-radius: 4px;
+            min-width: 52px;
+            text-align: center;
+        }
+
+        .method.get  { background: #0f3d2e; color: var(--green); border: 1px solid var(--green-dim); }
+        .method.post { background: #3b1f0a; color: var(--orange); border: 1px solid #7c3010; }
+
+        .route {
+            font-size: 0.9rem;
+            color: var(--text);
+        }
+
+        .route em {
+            color: var(--blue);
+            font-style: normal;
+        }
+
+        .desc {
+            margin-left: auto;
+            font-size: 0.72rem;
+            color: var(--muted);
+            white-space: nowrap;
+        }
+
+        .code-block {
+            background: #080a0d;
+            padding: 20px 24px;
+            position: relative;
+            overflow-x: auto;
+        }
+
+        .code-block pre {
+            font-size: 0.78rem;
+            line-height: 1.7;
+            color: var(--text-dim);
+            white-space: pre;
+        }
+
+        /* syntax colors */
+        .k { color: #f472b6; }   /* keyword / flag */
+        .s { color: #a3e635; }   /* string */
+        .u { color: var(--blue); } /* url */
+        .p { color: var(--orange); } /* param key */
+        .c { color: var(--muted); font-style: italic; } /* comment */
+
+        .copy-btn {
+            position: absolute;
+            top: 14px;
+            right: 16px;
+            background: var(--border);
+            border: none;
+            color: var(--muted);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            letter-spacing: 0.08em;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-transform: uppercase;
+        }
+
+        .copy-btn:hover { background: var(--green-dim); color: var(--green); }
+        .copy-btn.copied { color: var(--green); }
+
+        .section-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 0.65rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-title::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+
+        footer {
+            margin-top: 56px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
+            font-size: 0.7rem;
+            color: var(--muted);
+            display: flex;
+            justify-content: space-between;
+            animation: fadeUp 0.5s 0.5s ease both;
+        }
+
+        .dot {
+            display: inline-block;
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--green);
+            margin-right: 6px;
+            box-shadow: 0 0 6px var(--green);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        @keyframes fadeDown {
+            from { opacity: 0; transform: translateY(-16px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(16px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 600px) {
+            .desc { display: none; }
+            .logo { font-size: 1.8rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <header>
+        <div class="logo">MyBooks <span>API</span></div>
+        <div class="tagline">REST · Axum · PostgreSQL · Rust</div>
+        <div class="base-url">http://localhost:8080/api</div>
+    </header>
+
+    <div class="section-title">Endpoints</div>
+
+    <!-- GET all books -->
+    <div class="endpoint">
+        <div class="endpoint-header">
+            <span class="method get">GET</span>
+            <span class="route">/api/books</span>
+            <span class="desc">get all books</span>
+        </div>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">copy</button>
+            <pre><span class="k">curl</span> <span class="k">--location</span> <span class="s">'http://localhost:8080/api/books'</span></pre>
+        </div>
+    </div>
+
+    <!-- GET book by id -->
+    <div class="endpoint">
+        <div class="endpoint-header">
+            <span class="method get">GET</span>
+            <span class="route">/api/books/<em>:id</em></span>
+            <span class="desc">get book by id</span>
+        </div>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">copy</button>
+            <pre><span class="k">curl</span> <span class="k">--location</span> <span class="s">'http://localhost:8080/api/books/1'</span></pre>
+        </div>
+    </div>
+
+    <!-- POST create book -->
+    <div class="endpoint">
+        <div class="endpoint-header">
+            <span class="method post">POST</span>
+            <span class="route">/api/books</span>
+            <span class="desc">create new book</span>
+        </div>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">copy</button>
+            <pre><span class="k">curl</span> <span class="k">--location</span> <span class="s">'http://localhost:8080/api/books'</span> <span class="k">\</span>
+     <span class="k">--header</span> <span class="s">'Content-Type: application/json'</span> <span class="k">\</span>
+     <span class="k">--data</span> <span class="s">'{</span>
+  <span class="p">"title"</span><span class="s">:</span>            <span class="s">"Dune"</span><span class="s">,</span>
+  <span class="p">"author_id"</span><span class="s">:</span>        <span class="s">1</span><span class="s">,</span>
+  <span class="p">"genre_id"</span><span class="s">:</span>         <span class="s">200</span><span class="s">,</span>
+  <span class="p">"series_id"</span><span class="s">:</span>        <span class="s">3</span><span class="s">,</span>
+  <span class="p">"publication_year"</span><span class="s">:</span> <span class="s">"1965-01-01"</span><span class="s">,</span>
+  <span class="p">"publisher"</span><span class="s">:</span>        <span class="s">"Chilton Books"</span><span class="s">,</span>
+  <span class="p">"volume_number"</span><span class="s">:</span>    <span class="s">"1"</span><span class="s">,</span>
+  <span class="p">"place_id"</span><span class="s">:</span>         <span class="s">11</span><span class="s">,</span>
+  <span class="p">"description"</span><span class="s">:</span>      <span class="s">"A science fiction masterpiece"</span>
+<span class="s">}'</span></pre>
+        </div>
+    </div>
+
+    <footer>
+        <span><span class="dot"></span>running on localhost:8080</span>
+        <span>mybooks · rust + axum + sqlx</span>
+    </footer>
+
+</div>
+
+<script>
+    function copyCode(btn) {
+        const pre = btn.nextElementSibling;
+        const text = pre.textContent;
+        navigator.clipboard.writeText(text).then(() => {
+            btn.textContent = 'copied!';
+            btn.classList.add('copied');
+            setTimeout(() => {
+                btn.textContent = 'copy';
+                btn.classList.remove('copied');
+            }, 2000);
+        });
+    }
+</script>
+</body>
+</html>

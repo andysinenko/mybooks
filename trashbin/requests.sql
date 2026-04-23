@@ -1,6 +1,6 @@
 SELECT setval(
-   pg_get_serial_sequence('books', 'id'),
-   (SELECT MAX(id) FROM books)); -- shitty behavior
+               pg_get_serial_sequence('books', 'id'),
+               (SELECT MAX(id) FROM books)); -- shitty behavior
 
 select * from genre g ;
 
