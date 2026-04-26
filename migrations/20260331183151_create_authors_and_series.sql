@@ -11,6 +11,8 @@ INSERT INTO authors (id, name) VALUES (2, 'Author2');
 INSERT INTO authors (id, name) VALUES (3, 'Author3');
 INSERT INTO authors (id, name) VALUES (4, 'Author4');
 INSERT INTO authors (id, name) VALUES (5, 'Author5');
+
+SELECT setval(pg_get_serial_sequence('authors', 'id'), MAX(id)) FROM authors;
 -------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS series (
     id BIGSERIAL PRIMARY KEY,
@@ -30,6 +32,8 @@ INSERT INTO series (id, name) values (7, 'series 7');
 INSERT INTO series (id, name) values (8, 'series 8');
 INSERT INTO series (id, name) values (9, 'series 9');
 INSERT INTO series (id, name) values (10, 'series 10');
+
+SELECT setval(pg_get_serial_sequence('series', 'id'), MAX(id)) FROM series;
 ----------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS places (
     id BIGSERIAL PRIMARY KEY,
@@ -86,6 +90,8 @@ INSERT INTO places (id, name, parent_id, description, level) VALUES
  (34, 'Shelf', 31, 'шкаф в большой комнате', 3),
  (35, 'Shelf', 32, 'шкаф в маленькой комнате', 3),
  (36, 'Shelf', 33, 'шкаф в коридоре', 3);
+
+SELECT setval(pg_get_serial_sequence('places', 'id'), MAX(id)) FROM places;
 ----------------------------------------------------------------
 CREATE TABLE genre (
   id BIGSERIAL PRIMARY KEY,
@@ -152,6 +158,8 @@ INSERT INTO genre (id, name, note) VALUES
   (604, 'ALGORITHMS AND DATA STRUCTURES', 'Алгоритмы и структуры данных'),
   (605, 'NETWORKS', 'Сети'),
   (606, 'CRYPTOGRAPHY', 'Криптография');
+
+SELECT setval(pg_get_serial_sequence('genre', 'id'), MAX(id)) FROM genre;
 
 ----------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS books (
@@ -223,3 +231,5 @@ VALUES
     (38, '2012-01-01', 3, 'Book 38', 'Publisher 38', '38', 200, 8, 'Description of Book 38', 18, NOW() - INTERVAL '13 years', NOW() - INTERVAL '13 years'),
     (39, '2013-01-01', 4, 'Book 39', 'Publisher 39', '39', 300, 9, 'Description of Book 39', 19, NOW() - INTERVAL '12 years', NOW() - INTERVAL '12 years'),
     (40, '2014-01-01', 5, 'Book 40', 'Publisher 40', '40', 100, 10, 'Description of Book 40', 20, NOW() - INTERVAL '11 years', NOW() - INTERVAL '11 years');
+
+SELECT setval(pg_get_serial_sequence('books', 'id'), MAX(id)) FROM books;

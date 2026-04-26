@@ -18,3 +18,9 @@ impl From<GenreEntity> for GenreDto {
         }
     }
 }
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct CreateGenreDto {
+    pub name: String,
+    pub note: Option<String>,
+}

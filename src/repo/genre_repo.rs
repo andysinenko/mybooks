@@ -1,18 +1,22 @@
+use crate::domain::books::genre_dto::CreateGenreDto;
 use crate::domain::books::genre_entity::GenreEntity;
-use crate::domain::error_handling::books_error::BooksError;
-use sqlx::{query, query_as, PgPool};
+use sqlx::{PgPool, query, query_as};
 use tracing::{error, info, warn};
 
 pub async fn fetch_genre_by_id(pool: &PgPool, id: i64) -> Result<Option<GenreEntity>, sqlx::Error> {
     info!("Выполняем запрос жанра id={}", id);
 
-    let genre = query_as!(GenreEntity, "SELECT id,
+    let genre = query_as!(
+        GenreEntity,
+        "SELECT id,
             name,
             note,
             created_at,
-            updated_at FROM genre WHERE id = $1", id)
-        .fetch_optional(pool)
-        .await?;
+            updated_at FROM genre WHERE id = $1",
+        id
+    )
+    .fetch_optional(pool)
+    .await?;
 
     Ok(genre)
 }
@@ -32,10 +36,26 @@ pub async fn fetch_genres(pool: &PgPool) -> Result<Vec<GenreEntity>, sqlx::Error
         FROM genre
         "#
     )
-        .fetch_all(pool)
-        .await;
+    .fetch_all(pool)
+    .await;
     genres
 }
 
+pub async fn create_genre(
+    pool: &PgPool,
+    genre_dto: CreateGenreDto,
+) -> Result<GenreEntity, sqlx::Error> {
+    let record = query_as!(
+        GenreEntity,
+        r#"
+            INSERT INTO genre (name, note) VALUES ($1, $2)
+            RETURNING id, name, note, created_at, updated_at
+        "#,
+        genre_dto.name,
+        genre_dto.note
+    )
+    .fetch_one(pool)
+    .await?;
 
-
+    Ok(record)
+}

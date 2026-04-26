@@ -1,4 +1,4 @@
-use crate::domain::books::genre_dto::GenreDto;
+use crate::domain::books::genre_dto::{CreateGenreDto, GenreDto};
 use crate::domain::error_handling::books_error::BooksError;
 use crate::state::AppState;
 use crate::repo::{genre_repo};
@@ -21,4 +21,12 @@ pub async fn get_genres(state: &AppState) -> Result<Vec<GenreDto>, BooksError> {
                 genres.into_iter().map(GenreDto::from).collect()
             });
     genres
+}
+
+pub async fn create_genre(state: &AppState, genre_dto: CreateGenreDto) -> Result<GenreDto, BooksError> {
+    let created_genre = genre_repo::create_genre(&state.db_pool, genre_dto).await
+        .map_err(|e| BooksError::DatabaseError("New genre didn't stored".to_string()))
+        .map(|genre| GenreDto::from(genre));
+
+    created_genre
 }
