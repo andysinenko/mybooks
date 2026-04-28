@@ -7,7 +7,6 @@ use serde::Serialize;
 pub enum BooksError {
     NotFound(String),
     DatabaseError(String),
-    Internal(String),
 }
 
 #[derive(Serialize)]
@@ -19,7 +18,6 @@ impl IntoResponse for BooksError {
     fn into_response(self) -> Response {
         let (status, message) = match self { 
             BooksError::NotFound(msg) => (StatusCode::NOT_FOUND, msg),
-            BooksError::Internal(msg) => (StatusCode::INTERNAL_SERVER_ERROR, msg),
             BooksError::DatabaseError(msg) => (StatusCode::INTERNAL_SERVER_ERROR, msg),
         };
 

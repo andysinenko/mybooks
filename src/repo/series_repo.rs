@@ -1,7 +1,6 @@
 use crate::domain::books::series_entity::SeriesEntity;
-use crate::domain::error_handling::books_error::BooksError;
-use sqlx::{query, query_as, Error, PgPool};
-use tracing::{error, info, warn};
+use sqlx::{ query_as, PgPool};
+use tracing::info;
 
 pub async fn fetch_series_by_id(pool: &PgPool, id: i64) -> Result<Option<SeriesEntity>, sqlx::Error> {
     info!("Выполняем запрос серии id={}", id);

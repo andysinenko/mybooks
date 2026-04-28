@@ -26,7 +26,7 @@ pub async fn get_genres(state: &AppState) -> Result<Vec<GenreDto>, BooksError> {
 pub async fn create_genre(state: &AppState, genre_dto: CreateGenreDto) -> Result<GenreDto, BooksError> {
     let created_genre = genre_repo::save_genre(&state.db_pool, genre_dto)
         .await
-        .map_err(|e| BooksError::DatabaseError("New genre didn't stored".to_string()))
+        .map_err(|_| BooksError::DatabaseError("New genre didn't stored".to_string()))
         .map(|genre| GenreDto::from(genre));
 
     created_genre

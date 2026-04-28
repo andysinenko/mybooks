@@ -1,7 +1,6 @@
 use crate::domain::books::{author_entity::AuthorEntity};
-use crate::domain::error_handling::books_error::BooksError;
-use sqlx::{query, query_as, Error, PgPool};
-use tracing::{error, info, warn};
+use sqlx::{query_as, PgPool};
+use tracing::{info};
 use crate::domain::books::author_dto::CreateAuthorDto;
 
 pub async fn fetch_author_by_id(

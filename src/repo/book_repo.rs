@@ -1,6 +1,6 @@
 use crate::domain::books::book_dto::CreateBookDto;
 use crate::domain::books::book_entity::BookEntity;
-use sqlx::{query, query_as, Error, PgPool};
+use sqlx::{ query_as, Error, PgPool};
 use tracing::info;
 
 pub async fn fetch_books(pool: &PgPool) -> Result<Vec<BookEntity>, Error> {

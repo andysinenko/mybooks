@@ -1,7 +1,7 @@
 use crate::domain::books::genre_dto::CreateGenreDto;
 use crate::domain::books::genre_entity::GenreEntity;
-use sqlx::{query, query_as, PgPool};
-use tracing::{error, info, warn};
+use sqlx::{query_as, PgPool};
+use tracing::info;
 
 pub async fn fetch_genre_by_id(pool: &PgPool, id: i64) -> Result<Option<GenreEntity>, sqlx::Error> {
     info!("Выполняем запрос жанра id={}", id);
@@ -22,8 +22,6 @@ pub async fn fetch_genre_by_id(pool: &PgPool, id: i64) -> Result<Option<GenreEnt
 }
 
 pub async fn fetch_genres(pool: &PgPool) -> Result<Vec<GenreEntity>, sqlx::Error> {
-    let start = std::time::Instant::now();
-
     let genres: Result<Vec<GenreEntity>, sqlx::Error> = query_as!(
         GenreEntity,
         r#"
