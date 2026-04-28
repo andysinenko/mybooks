@@ -5,10 +5,10 @@ mod handlers;
 mod service;
 mod repo;
 
-use std::env;
-use state::AppState;
-use sqlx::PgPool;
 use crate::app::create_app;
+use sqlx::PgPool;
+use state::AppState;
+use std::env;
 
 #[tokio::main]
 async fn main() {
@@ -16,8 +16,7 @@ async fn main() {
     dotenv::dotenv().ok();
 
     let database_url = build_db_url();
-
-    tracing::info!("DATABASE_URL {}", database_url);
+    tracing::info!("*** My Books is starting ***");
 
     let db_pool = PgPool::connect(&database_url).await.unwrap();
 

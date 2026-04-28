@@ -1,6 +1,6 @@
 use crate::domain::books::genre_dto::CreateGenreDto;
 use crate::domain::books::genre_entity::GenreEntity;
-use sqlx::{PgPool, query, query_as};
+use sqlx::{query, query_as, PgPool};
 use tracing::{error, info, warn};
 
 pub async fn fetch_genre_by_id(pool: &PgPool, id: i64) -> Result<Option<GenreEntity>, sqlx::Error> {
@@ -41,7 +41,7 @@ pub async fn fetch_genres(pool: &PgPool) -> Result<Vec<GenreEntity>, sqlx::Error
     genres
 }
 
-pub async fn create_genre(
+pub async fn save_genre(
     pool: &PgPool,
     genre_dto: CreateGenreDto,
 ) -> Result<GenreEntity, sqlx::Error> {

@@ -1,7 +1,7 @@
+use crate::domain::books::book_dto::CreateBookDto;
 use crate::domain::books::book_entity::BookEntity;
 use sqlx::{query, query_as, Error, PgPool};
 use tracing::info;
-use crate::domain::books::book_dto::CreateBookDto;
 
 pub async fn fetch_books(pool: &PgPool) -> Result<Vec<BookEntity>, Error> {
     info!("Выполняем запрос книг");
@@ -81,7 +81,7 @@ pub async fn fetch_book(pool: &PgPool, id: i64) -> Result<Option<BookEntity>, sq
 
 }
 
-pub async fn create_book(pool: &PgPool, dto: CreateBookDto, ) -> Result<BookEntity, sqlx::Error> {
+pub async fn save_book(pool: &PgPool, dto: CreateBookDto, ) -> Result<BookEntity, sqlx::Error> {
     info!("Создаём новую книгу: {}", dto.title);
 
     let book = query_as!(

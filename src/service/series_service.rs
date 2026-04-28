@@ -1,9 +1,8 @@
-use crate::domain::books::author_dto::AuthorDto;
 use crate::domain::books::series_dto::SeriesDto;
 use crate::domain::error_handling::books_error::BooksError;
+use crate::repo::series_repo::fetch_series;
+use crate::repo::series_repo;
 use crate::state::AppState;
-use crate::repo::{series_repo};
-use crate::repo::series_repo::{fetch_series};
 
 pub async fn get_series_by_id(state: &AppState, id: i64) -> Result<SeriesDto, BooksError> {
     let series_option= series_repo::fetch_series_by_id(&state.db_pool, id)

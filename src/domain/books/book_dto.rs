@@ -1,9 +1,9 @@
-use crate::domain::books::book_entity::BookEntity;
-use chrono::NaiveDate;
-use serde::{Deserialize, Serialize};
 use crate::domain::books::author_dto::AuthorDto;
+use crate::domain::books::book_entity::BookEntity;
 use crate::domain::books::genre_dto::GenreDto;
 use crate::domain::books::series_dto::SeriesDto;
+use chrono::NaiveDate;
+use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct BookDto {

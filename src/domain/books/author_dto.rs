@@ -16,3 +16,8 @@ impl From<AuthorEntity> for AuthorDto {
         }
     }
 }
+
+#[derive(Debug, Deserialize, FromRow, Serialize)]
+pub struct CreateAuthorDto {
+    pub name: String,
+}
