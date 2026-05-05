@@ -16,3 +16,8 @@ impl From<SeriesEntity> for SeriesDto {
         }
     }
 }
+
+#[derive(Debug, Deserialize, FromRow)]
+pub struct CreateSeriesDto {
+    pub name: String,
+}
