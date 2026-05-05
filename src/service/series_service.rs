@@ -1,4 +1,3 @@
-use crate::domain::books::author_dto::CreateAuthorDto;
 use crate::domain::books::series_dto::{CreateSeriesDto, SeriesDto};
 use crate::domain::error_handling::books_error::BooksError;
 use crate::repo::series_repo::{fetch_series, save_series_repo};
