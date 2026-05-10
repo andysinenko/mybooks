@@ -6,9 +6,10 @@ mod service;
 mod repo;
 
 use crate::app::create_app;
-use sqlx::PgPool;
 use state::AppState;
 use std::env;
+use std::time::Duration;
+use sqlx::postgres::PgPoolOptions;
 
 #[tokio::main]
 async fn main() {
@@ -18,7 +19,13 @@ async fn main() {
     let database_url = build_db_url();
     tracing::info!("*** My Books is starting ***");
 
-    let db_pool = PgPool::connect(&database_url).await.unwrap();
+    let db_pool = PgPoolOptions::new()
+        .max_connections(100)
+        .min_connections(10)
+        .acquire_timeout(Duration::from_secs(3))
+        .connect(&database_url)
+        .await
+        .unwrap();
 
     let state = AppState { db_pool };
 
@@ -60,7 +67,7 @@ fn build_db_url() -> String {
 fn tracer_subscr() {
     tracing_subscriber::fmt()
         .with_env_filter(
-            "info,sqlx::query=debug"
+            "info,sqlx::query=info"
         )
         .with_ansi(true)           
         .init();

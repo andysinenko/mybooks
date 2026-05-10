@@ -1,0 +1,112 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT\n            b.id,\n            b.publication_year,\n            b.title,\n            b.publisher,\n            b.volume_number,\n\n            g.id as genre_id,\n            g.name as genre_name,\n            g.note as genre_note,\n\n            a.id as author_id,\n            a.name as author_name,\n\n            s.id as series_id,\n            s.name as series_name,\n\n            b.place_id,\n            b.description,\n            b.created_at,\n            b.updated_at\n        FROM books b\n        INNER JOIN series s ON b.series_id = s.id\n        INNER JOIN authors a ON b.author_id = a.id\n        INNER JOIN genre g ON b.genre_id = g.id\n        WHERE b.id = $1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Int8"
+      },
+      {
+        "ordinal": 1,
+        "name": "publication_year",
+        "type_info": "Date"
+      },
+      {
+        "ordinal": 2,
+        "name": "title",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 3,
+        "name": "publisher",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 4,
+        "name": "volume_number",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 5,
+        "name": "genre_id",
+        "type_info": "Int8"
+      },
+      {
+        "ordinal": 6,
+        "name": "genre_name",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 7,
+        "name": "genre_note",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 8,
+        "name": "author_id",
+        "type_info": "Int8"
+      },
+      {
+        "ordinal": 9,
+        "name": "author_name",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 10,
+        "name": "series_id",
+        "type_info": "Int8"
+      },
+      {
+        "ordinal": 11,
+        "name": "series_name",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 12,
+        "name": "place_id",
+        "type_info": "Int8"
+      },
+      {
+        "ordinal": 13,
+        "name": "description",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 14,
+        "name": "created_at",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 15,
+        "name": "updated_at",
+        "type_info": "Timestamptz"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Int8"
+      ]
+    },
+    "nullable": [
+      false,
+      true,
+      false,
+      true,
+      true,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true
+    ]
+  },
+  "hash": "4b33a7f9f05b54267494188429f659480ecc3702df63e710e07b38ec4cc8774e"
+}

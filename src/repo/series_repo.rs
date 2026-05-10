@@ -1,13 +1,13 @@
 use crate::domain::books::series_dto::CreateSeriesDto;
 use crate::domain::books::series_entity::SeriesEntity;
 use sqlx::{PgPool, query_as};
-use tracing::info;
+use tracing::debug;
 
 pub async fn fetch_series_by_id(
     pool: &PgPool,
     id: i64,
 ) -> Result<Option<SeriesEntity>, sqlx::Error> {
-    info!("Выполняем запрос серии id={}", id);
+    debug!("Выполняем запрос серии id={}", id);
 
     let series = query_as!(
         SeriesEntity,
@@ -21,7 +21,7 @@ pub async fn fetch_series_by_id(
 }
 
 pub async fn fetch_series(pool: &PgPool) -> Result<Vec<SeriesEntity>, sqlx::Error> {
-    info!("Выполняем запрос серий");
+    debug!("Выполняем запрос серий");
     let start = std::time::Instant::now();
 
     let series = query_as!(
@@ -38,7 +38,7 @@ pub async fn fetch_series(pool: &PgPool) -> Result<Vec<SeriesEntity>, sqlx::Erro
     .fetch_all(pool)
     .await?;
     let elapsed = start.elapsed();
-    info!(
+    debug!(
         rows = series.len(),
         elapsed_ms = elapsed.as_millis(),
         "Успешно получены серии"
@@ -51,7 +51,7 @@ pub async fn save_series_repo(
     pool: &PgPool,
     create_series_dto: CreateSeriesDto,
 ) -> Result<SeriesEntity, sqlx::Error> {
-    info!("Save series {}", create_series_dto.name);
+    debug!("Save series {}", create_series_dto.name);
 
     let series: Result<SeriesEntity, sqlx::Error> = query_as!(
         SeriesEntity,
@@ -64,7 +64,7 @@ pub async fn save_series_repo(
     .fetch_one(pool)
     .await;
 
-    info!("Series stored successfully");
+    debug!("Series stored successfully");
 
     series
 }

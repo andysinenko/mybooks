@@ -36,7 +36,12 @@ MyBooks will be available on `http://localhost:8080`.
 ## Configuration
 
 Copy `.env.example` to `.env` and change the values as needed.
+compose.yaml must be one level upper than /gateway and /mybooks
 
+### Added prepered reuests for query_as! macros to avvoid errors on boild in docker.
+1. Made ``` $ cargo sqlx prepare```
+2. Added environment variable ```ENV SQLX_OFFLINE=true```
+3. Added generated files to Docker.
 
 
 

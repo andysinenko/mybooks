@@ -8,22 +8,20 @@ pub async fn get_book_by_id(state: &AppState, id: i64) -> Result<BookDto, BooksE
         .await
         .map_err(|e| BooksError::DatabaseError(e.to_string()))?;
 
-    let book = book_option
+    book_option
         .map(BookDto::from)
-        .ok_or_else(|| BooksError::NotFound(format!("Книга с id {id} не найдена")));
-
-    book
+        .ok_or_else(|| BooksError::NotFound(format!("Книга с id {id} не найдена")))
 }
 
 pub async fn get_books(state: &AppState) -> Result<Vec<BookDto>, BooksError> {
-    let books: Result<Vec<BookDto>, BooksError> = book_repo::fetch_books(&state.db_pool)
+    book_repo::fetch_books(&state.db_pool)
         .await
         .map_err(|e| BooksError::DatabaseError(e.to_string()))
         .map(|books| {
             books.into_iter().map(BookDto::from).collect()
-        });
-    books
+        })
 }
+
 
 pub async fn create_book(state: &AppState, dto: CreateBookDto) -> Result<BookDto, BooksError> {
     book_repo::save_book(&state.db_pool, dto)

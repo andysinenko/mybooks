@@ -1,10 +1,10 @@
 use crate::domain::books::book_dto::CreateBookDto;
 use crate::domain::books::book_entity::BookEntity;
 use sqlx::{ query_as, Error, PgPool};
-use tracing::info;
+use tracing::debug;
 
 pub async fn fetch_books(pool: &PgPool) -> Result<Vec<BookEntity>, Error> {
-    info!("Выполняем запрос книг");
+    debug!("Выполняем запрос книг");
     let start = std::time::Instant::now();
 
     let books = query_as!(
@@ -40,13 +40,13 @@ pub async fn fetch_books(pool: &PgPool) -> Result<Vec<BookEntity>, Error> {
     .fetch_all(pool)
     .await?;
     let elapsed = start.elapsed();
-    info!(rows = books.len(), elapsed_ms = elapsed.as_millis(), "Успешно получены книги");
+    debug!(rows = books.len(), elapsed_ms = elapsed.as_millis(), "Успешно получены книги");
 
     Ok(books)
 }
 
 pub async fn fetch_book(pool: &PgPool, id: i64) -> Result<Option<BookEntity>, sqlx::Error> {
-    info!("Выполняем запрос книги id={}", id);
+    debug!("Выполняем запрос книги id={}", id);
 
     let book = query_as!(BookEntity, "SELECT
             b.id,
@@ -82,7 +82,7 @@ pub async fn fetch_book(pool: &PgPool, id: i64) -> Result<Option<BookEntity>, sq
 }
 
 pub async fn save_book(pool: &PgPool, dto: CreateBookDto, ) -> Result<BookEntity, sqlx::Error> {
-    info!("Создаём новую книгу: {}", dto.title);
+    debug!("Создаём новую книгу: {}", dto.title);
 
     let book = query_as!(
         BookEntity,
@@ -135,7 +135,7 @@ pub async fn save_book(pool: &PgPool, dto: CreateBookDto, ) -> Result<BookEntity
         .fetch_one(pool)
         .await?;
 
-    info!(id = book.id, "Книга успешно создана");
+    debug!(id = book.id, "Книга успешно создана");
     Ok(book)
 }
 

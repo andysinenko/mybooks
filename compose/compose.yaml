@@ -1,25 +1,37 @@
 services:
   postgres:
     image: postgres:latest
+    container_name: 'things'
+    ports:
+      - '5432:5432'
+    command: postgres -c max_connections=300
     environment:
-      - POSTGRES_DB=${POSTGRES_DB}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_USER=${POSTGRES_USERNAME}
-      - POSTGRES_SCHEMA=${POSTGRES_SCHEMA}
+      - POSTGRES_DB=${POSTGRES_DB_RST}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD_RST}
+      - POSTGRES_USER=${POSTGRES_USERNAME_RST}
+      - POSTGRES_SCHEMA=${POSTGRES_SCHEMA_RST}
+      - TZ=Europe/Kyiv
+      - PGTZ=Europe/Kyiv
     volumes:
-      - db:/var/lib/postgresql/data
+      - db:/var/lib/postgresql
+      - ./mybooks/compose/init.sql:/docker-entrypoint-initdb.d/init.sql
+    env_file:
+      - ./mybooks/.env
     networks:
       - db
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USERNAME} -d ${POSTGRES_DB}"]
+      test: [ "CMD-SHELL", "pg_isready -U things_service -d things_rust" ]
       interval: 5s
       timeout: 5s
       retries: 5
 
-  backend:
-    build: ./backend
+  mybooks:
+    build: ./mybooks
+    container_name: mybooks
+    ports:
+      - "8080:8080"
     env_file:
-      - .env
+      - ./mybooks/.env
     networks:
       - db
       - internal
@@ -29,16 +41,20 @@ services:
 
   gateway:
     build: ./gateway
+    container_name: gateway
     ports:
       - "3000:3000"
+    env_file:
+      - ./gateway/.env
     environment:
       - GW_HOST=0.0.0.0
       - GW_PORT=3000
-      - GW_CONFIG_PATH=/app/config.yaml
+      - GW_CONFIG_PATH=/app/gwconfig.yaml
+      - GW_ROUTE_CONFIG_PATH=/app/route_config.yaml
     networks:
       - internal
     depends_on:
-      - backend
+      - mybooks
 
 networks:
   db:

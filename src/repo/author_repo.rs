@@ -1,13 +1,13 @@
 use crate::domain::books::{author_entity::AuthorEntity};
 use sqlx::{query_as, PgPool};
-use tracing::{info};
+use tracing::{debug};
 use crate::domain::books::author_dto::CreateAuthorDto;
 
 pub async fn fetch_author_by_id(
     pool: &PgPool,
     id: i64,
 ) -> Result<Option<AuthorEntity>, sqlx::Error> {
-    info!("Выполняем запрос автора id={}", id);
+    debug!("Выполняем запрос автора id={}", id);
 
     let author = query_as!(
         AuthorEntity,
@@ -22,7 +22,7 @@ pub async fn fetch_author_by_id(
 }
 
 pub async fn fetch_authors(pool: &PgPool) -> Result<Vec<AuthorEntity>, sqlx::Error> {
-    info!("Выполняем запрос авторов");
+    debug!("Выполняем запрос авторов");
     let start = std::time::Instant::now();
 
     let authors = query_as!(
@@ -33,7 +33,7 @@ pub async fn fetch_authors(pool: &PgPool) -> Result<Vec<AuthorEntity>, sqlx::Err
     .await?;
 
     let elapsed = start.elapsed();
-    info!(
+    debug!(
         rows = authors.len(),
         elapsed_ms = elapsed.as_millis(),
         "Успешно получены авторы"
@@ -45,7 +45,7 @@ pub async fn save_author(
     pool: &PgPool,
     author: CreateAuthorDto,
 ) -> Result<AuthorEntity, sqlx::Error> {
-    info!("Storing new author");
+    debug!("Storing new author");
     let record: AuthorEntity = query_as!(
         AuthorEntity,
         r#"

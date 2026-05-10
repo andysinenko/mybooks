@@ -1,0 +1,120 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n        WITH inserted AS (\n            INSERT INTO books (\n                title, publication_year, publisher,\n                volume_number, author_id, genre_id,\n                series_id, place_id, description\n            )\n            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)\n            RETURNING *\n        )\n        SELECT\n            i.id,\n            i.publication_year,\n            i.title,\n            i.publisher,\n            i.volume_number,\n\n            g.id as genre_id,\n            g.name as genre_name,\n            g.note as genre_note,\n\n            a.id as author_id,\n            a.name as author_name,\n\n            s.id as series_id,\n            s.name as series_name,\n\n            i.place_id,\n            i.description,\n            i.created_at,\n            i.updated_at\n        FROM inserted i\n        INNER JOIN genre g ON i.genre_id = g.id\n        INNER JOIN authors a ON i.author_id = a.id\n        INNER JOIN series s ON i.series_id = s.id\n        ",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Int8"
+      },
+      {
+        "ordinal": 1,
+        "name": "publication_year",
+        "type_info": "Date"
+      },
+      {
+        "ordinal": 2,
+        "name": "title",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 3,
+        "name": "publisher",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 4,
+        "name": "volume_number",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 5,
+        "name": "genre_id",
+        "type_info": "Int8"
+      },
+      {
+        "ordinal": 6,
+        "name": "genre_name",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 7,
+        "name": "genre_note",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 8,
+        "name": "author_id",
+        "type_info": "Int8"
+      },
+      {
+        "ordinal": 9,
+        "name": "author_name",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 10,
+        "name": "series_id",
+        "type_info": "Int8"
+      },
+      {
+        "ordinal": 11,
+        "name": "series_name",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 12,
+        "name": "place_id",
+        "type_info": "Int8"
+      },
+      {
+        "ordinal": 13,
+        "name": "description",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 14,
+        "name": "created_at",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 15,
+        "name": "updated_at",
+        "type_info": "Timestamptz"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Varchar",
+        "Date",
+        "Varchar",
+        "Varchar",
+        "Int8",
+        "Int8",
+        "Int8",
+        "Int8",
+        "Text"
+      ]
+    },
+    "nullable": [
+      false,
+      true,
+      false,
+      true,
+      true,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true
+    ]
+  },
+  "hash": "cc1ed8c53f6a1c85ab519c5082ab371674c3103b9b549896308b876e269ea3a7"
+}

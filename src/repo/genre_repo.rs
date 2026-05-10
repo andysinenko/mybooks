@@ -1,10 +1,10 @@
 use crate::domain::books::genre_dto::CreateGenreDto;
 use crate::domain::books::genre_entity::GenreEntity;
 use sqlx::{query_as, PgPool};
-use tracing::info;
+use tracing::debug;
 
 pub async fn fetch_genre_by_id(pool: &PgPool, id: i64) -> Result<Option<GenreEntity>, sqlx::Error> {
-    info!("Выполняем запрос жанра id={}", id);
+    debug!("Выполняем запрос жанра id={}", id);
 
     let genre = query_as!(
         GenreEntity,
